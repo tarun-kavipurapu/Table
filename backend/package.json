@@ -1,0 +1,7 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend for Form",
+  "main": "src/index.js",
+  "license": "MIT"
+}
