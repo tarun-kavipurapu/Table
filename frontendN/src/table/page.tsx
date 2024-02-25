@@ -1,6 +1,6 @@
 "use client";
 import { use, useEffect, useState } from "react";
-import { columns } from "./columns";
+import { columns } from "@/components/columns";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import AddEntry from "@/components/AddEntry";
@@ -14,7 +14,7 @@ import {
 } from "@/store/personSlice";
 // import DeleteEntry from "@/components/DeleteEntry"; // Import the DeleteEntry component
 
-function DemoPage() {
+const Page = () => {
   const dispatch = useAppDispatch();
   const personData = useAppSelector((state) => state.person.personData);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +64,6 @@ function DemoPage() {
       </span>
     </div>
   );
-}
+};
 
-export default DemoPage;
+export default Page;
