@@ -3,7 +3,9 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import Header from "@/components/Header";
-import { Providers } from "./provider";
+import { ReduxProvider } from "../store/provider";
+import { ToastContainer } from "react-toastify";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
+        <ReduxProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -27,9 +29,21 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Header />
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
             {children}
           </ThemeProvider>
-        </Providers>
+        </ReduxProvider>
       </body>
     </html>
   );

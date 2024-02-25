@@ -20,15 +20,15 @@ import {
   FormMessage,
 } from "../components/ui/form";
 import { Input } from "../components/ui/input";
-import { personSchema } from "@/lib/validations";
+import { updatePersonSchema } from "@/lib/validations";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setAddEntry } from "@/store/personSlice";
-type Person = z.infer<typeof personSchema>;
+import { setAddEntry, setUpdateData } from "@/store/personSlice";
+type Person = z.infer<typeof updatePersonSchema>;
 
-export default function AddEntry() {
+export default function UpdateEntry({ row }: any) {
   const dispatch = useAppDispatch();
   const form = useForm<Person>({
-    resolver: zodResolver(personSchema),
+    resolver: zodResolver(updatePersonSchema),
     defaultValues: {
       name: "",
       phone: "",
@@ -39,8 +39,27 @@ export default function AddEntry() {
     },
   });
   const [open, setOpen] = useState(false);
-  function onSubmit(values: Person) {
-    dispatch(setAddEntry(values));
+  function onSubmit(values: any) {
+    const { name, email, phone, hobbies } = values;
+    const fieldsToUpdate: { fieldname: string; value: any }[] = [];
+
+    if (name !== null && name !== "") {
+      fieldsToUpdate.push({ fieldname: "name", value: name });
+    }
+    if (email !== null && email !== "") {
+      fieldsToUpdate.push({ fieldname: "email", value: email });
+    }
+    if (phone !== null && phone !== "") {
+      fieldsToUpdate.push({ fieldname: "phone", value: phone });
+    }
+    if (hobbies !== null && hobbies !== "") {
+      fieldsToUpdate.push({ fieldname: "hobbies", value: hobbies });
+    }
+
+    fieldsToUpdate.forEach(({ fieldname, value }) => {
+      dispatch(setUpdateData({ fieldname, value, _id: row._id }));
+    });
+
     setOpen(false);
   }
   console.log;
@@ -48,13 +67,13 @@ export default function AddEntry() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="">
-          Add Entry
+          Update Entry
         </Button>
       </DialogTrigger>
 
       <DialogContent className="w-[90vw] max-w-[400px]">
         <DialogHeader className="pb-2">
-          <DialogTitle>Add Details</DialogTitle>
+          <DialogTitle>Update Details</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>

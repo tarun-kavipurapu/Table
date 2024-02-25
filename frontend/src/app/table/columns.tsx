@@ -6,6 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAppDispatch } from "@/store/hooks";
 import { setDeleteEntry } from "@/store/personSlice";
+import { useState } from "react";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import UpdateEntry from "@/components/UpdateEntry";
 export type Person = {
   _id?: string;
   serial?: string;
@@ -108,10 +119,32 @@ export const columns: ColumnDef<Person>[] = [
     cell: ({ row }) => {
       // eslint-disable-next-line
       const dispatch = useAppDispatch();
+      // eslint-disable-next-line
+      const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+      // eslint-disable-next-line
+      const [fieldToUpdate, setFieldToUpdate] = useState("");
+
+      const handleUpdateClick = (fieldName: string) => {
+        setFieldToUpdate(fieldName);
+        setShowUpdateDialog(true);
+      };
+
+      const renderUpdateEntryDialog = () => {
+        if (showUpdateDialog && fieldToUpdate) {
+          return (
+            <UpdateEntry
+              row={row.original}
+              name={fieldToUpdate}
+              onClose={() => setShowUpdateDialog(false)}
+            />
+          );
+        }
+        return null;
+      };
 
       return (
-        <span className="flex flex-row gap-2">
-          <Button>Update</Button>
+        <span className="flex flex-row gap-1">
+          <UpdateEntry row={row.original} />
           <Button
             onClick={() =>
               row.original._id && dispatch(setDeleteEntry(row.original._id))

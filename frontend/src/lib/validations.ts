@@ -12,6 +12,16 @@ export const personSchema = z.object({
     .max(12, { message: "Phone number cannot exceed 12 characters" }),
   hobbies: z.string().optional(),
   isSaved: z.boolean().optional().default(false),
+  updateSaved: z.boolean().optional().default(false),
+});
+export const updatePersonSchema = z.object({
+  name: z.string().max(255).optional(),
+  email: z.string().max(0).or(z.string().email()),
+
+  phone: z.string().max(12).optional(),
+  hobbies: z.string().optional(),
+  isSaved: z.boolean().optional().default(false),
+  updateSaved: z.boolean().optional().default(false),
 });
 
 export type Person = z.infer<typeof personSchema>;

@@ -12,7 +12,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -25,7 +25,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { Trash2 } from "lucide-react";
+import { useAppSelector } from "@/store/hooks";
+import { sendMail } from "@/lib/api";
+import { toast } from "react-toastify";
 
 import {
   DropdownMenu,
@@ -46,6 +48,8 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [filterType, setFilterType] = useState("email"); // Default filter type
   const [rowSelection, setRowSelection] = useState({});
+  const personData = useAppSelector((state) => state.person.personData);
+
   const table = useReactTable({
     data,
     columns,
@@ -62,6 +66,16 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
+  const mailSend = () => {
+    const selectedRows = table.getSelectedRowModel().rows;
+    if (selectedRows.length === 0) {
+      toast.error("Please select atleast one row.");
+      return;
+    }
+    sendMail(selectedRows).then((respose) => {
+      toast.success("Mail sent successfully.");
+    });
+  };
 
   return (
     <div>
@@ -96,7 +110,7 @@ export function DataTable<TData, TValue>({
             (table.getColumn(filterType)?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn(filterType)?.setFilterValue(event.target.value)
+            table?.getColumn(filterType)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -104,7 +118,7 @@ export function DataTable<TData, TValue>({
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table?.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
@@ -121,9 +135,10 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
+
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table?.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
@@ -168,9 +183,12 @@ export function DataTable<TData, TValue>({
         >
           Next
         </Button>
+        <Button className="" onClick={mailSend}>
+          Send
+        </Button>
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table?.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table?.getFilteredRowModel().rows.length} row(s) selected.
         </div>
       </div>
     </div>

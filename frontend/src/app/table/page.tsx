@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import AddEntry from "@/components/AddEntry";
 import { postData, getData, deleteData } from "@/lib/api";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { Loader2 } from "lucide-react";
 import {
   setUpdateSerial,
   setSaveData,
@@ -16,11 +17,14 @@ import {
 function DemoPage() {
   const dispatch = useAppDispatch();
   const personData = useAppSelector((state) => state.person.personData);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    // Fetch data from the server
     const fetchData = async () => {
       const data = await getData();
-      const formattedData = data.map((item: any) => {
+      if (!data) {
+        return;
+      }
+      const formattedData = data?.map((item: any) => {
         return {
           _id: item._id,
           name: item.name,
@@ -30,18 +34,22 @@ function DemoPage() {
           isSaved: true,
         };
       });
-      dispatch(setPersonData(formattedData));
+      if (formattedData) {
+        dispatch(setPersonData(formattedData));
+      }
     };
     fetchData();
   }, [dispatch]);
   useEffect(() => {
-    dispatch(setUpdateSerial());
+    if (personData.length > 0) {
+      dispatch(setUpdateSerial());
+    }
   }, [dispatch, personData]);
 
-  // Function to add an entry to personData array
   return (
     <div className="container mx-auto py-5">
       <DataTable columns={columns} data={personData} />
+
       <span className="flex flex-row gap-1">
         {/* Pass addEntry function to AddEntry component */}
         <AddEntry />
