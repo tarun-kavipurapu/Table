@@ -21,11 +21,12 @@ import {
 } from "../components/ui/form";
 import { Input } from "../components/ui/input";
 import { personSchema } from "@/lib/validations";
-
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setAddEntry } from "@/store/personSlice";
 type Person = z.infer<typeof personSchema>;
 
-export default function AddEntry({ addEntry }: any) {
-  const [isLoading, setIsLoading] = useState(false);
+export default function AddEntry() {
+  const dispatch = useAppDispatch();
   const form = useForm<Person>({
     resolver: zodResolver(personSchema),
     defaultValues: {
@@ -38,9 +39,7 @@ export default function AddEntry({ addEntry }: any) {
   });
 
   function onSubmit(values: Person) {
-    setIsLoading(true);
-    addEntry(values);
-    // console.log(values);
+    dispatch(setAddEntry(values));
   }
   console.log;
   return (

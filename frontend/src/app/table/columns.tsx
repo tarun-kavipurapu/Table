@@ -4,17 +4,17 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { useAppDispatch } from "@/store/hooks";
+import { setDeleteEntry } from "@/store/personSlice";
 export type Person = {
   _id?: string;
-  serial: string;
+  serial?: string;
   name: string;
   phone: string;
   email: string;
   hobbies?: string;
   isSaved?: boolean;
 };
-
 export const columns: ColumnDef<Person>[] = [
   {
     id: "select",
@@ -28,13 +28,17 @@ export const columns: ColumnDef<Person>[] = [
         aria-label="Select all"
       />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
+    cell: ({ row }) => {
+      // eslint-disable-next-line
+      const dispatch = useAppDispatch();
+      return (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      );
+    },
     enableSorting: false,
     enableHiding: false,
   },
@@ -102,12 +106,17 @@ export const columns: ColumnDef<Person>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      // eslint-disable-next-line
+      const dispatch = useAppDispatch();
 
       return (
         <span className="flex flex-row gap-2">
-          <Button onClick={updateRow}>Update</Button>
-          <Button onClick={DeleteRow}>
+          <Button>Update</Button>
+          <Button
+            onClick={() =>
+              row.original._id && dispatch(setDeleteEntry(row.original._id))
+            }
+          >
             <Trash />
           </Button>
         </span>

@@ -28,3 +28,13 @@ export const postData = async (data: Person) => {
     return null;
   }
 };
+
+export const deleteData = async (id: string) => {
+  try {
+    const response = await axiosInstance.delete(`/api/v1/tables/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting data:", error);
+    return null;
+  }
+};
