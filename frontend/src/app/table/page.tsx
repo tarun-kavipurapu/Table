@@ -45,6 +45,12 @@ function DemoPage() {
       dispatch(setUpdateSerial());
     }
   }, [dispatch, personData]);
+  useEffect(() => {
+    window.onbeforeunload = () => true;
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
 
   return (
     <div className="container mx-auto py-5">

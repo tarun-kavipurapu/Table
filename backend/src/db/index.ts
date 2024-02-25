@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-// const DB_NAME = "fumble";
-// console.log(process.env.MONGODB_URL); ${DB_NAME}
 const connectDB = async () => {
   try {
     const connectionInstance = await mongoose.connect(

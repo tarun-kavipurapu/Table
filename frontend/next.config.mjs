@@ -1,4 +1,13 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+const NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/table",
+        permanent: true,
+      },
+    ];
+  },
+};
+export default NextConfig;

@@ -43,7 +43,6 @@ export default function AddEntry() {
     dispatch(setAddEntry(values));
     setOpen(false);
   }
-  console.log;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
