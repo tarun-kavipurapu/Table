@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { postData, getData, deleteData, updateData } from "@/lib/api";
 import { current } from "@reduxjs/toolkit";
-
+import { toast } from "react-toastify";
 export interface PersonArray {
   _id?: string;
   serial?: string;
@@ -13,7 +13,6 @@ export interface PersonArray {
   isSaved?: boolean;
   updateSaved?: boolean;
 }
-
 interface InitialState {
   personData: PersonArray[];
 }
@@ -31,12 +30,17 @@ const personSlice = createSlice({
     },
     setAddEntry: (state, action: PayloadAction<PersonArray>) => {
       state.personData.push(action.payload);
+      toast.success("Entry added successfully");
     },
     setDeleteEntry: (state, action: PayloadAction<string>) => {
       state.personData = state.personData.filter(
         (item) => item._id !== action.payload
       );
-      deleteData(action.payload);
+      deleteData(action.payload).then((response) => {
+        if (response) {
+          toast.success("Entry deleted successfully");
+        }
+      });
     },
     setSaveData: (state) => {
       state.personData.forEach((item) => {
@@ -48,7 +52,11 @@ const personSlice = createSlice({
             hobbies: item.hobbies,
           };
           //@ts-ignore
-          postData(data);
+          postData(data).then((response) => {
+            if (response) {
+              toast.success("Data saved successfully");
+            }
+          });
           item.isSaved = true; // Update isSaved for the current item
         }
       });
@@ -88,7 +96,11 @@ const personSlice = createSlice({
               email: item.email,
               hobbies: item.hobbies,
             };
-            updateData(_id, data);
+            updateData(_id, data).then((response) => {
+              if (response) {
+                toast.success("Data updated successfully");
+              }
+            });
             item.updateSaved = true;
           }
         }

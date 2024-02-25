@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
 
-export async function mailSend(userEmail: string) {
+export async function mailSend(userEmail: string, arrayBody: any[]) {
   let config = {
     service: "gmail",
     auth: {
@@ -22,18 +22,18 @@ export async function mailSend(userEmail: string) {
 
   let response = {
     body: {
-      name: "Tarun",
-      intro: "Internship test mail",
+      name: "Sir/Madam",
+      intro: "Data of the Persons is as follows:",
       table: {
-        data: [
-          {
-            name: "Nodemailer Stack Book",
-            description: "A Backend application",
-            price: "$10.99",
-          },
-        ],
+        data: arrayBody.map((item) => ({
+          id: item.original.serial, // Using serial as description, you can change this as needed
+          name: item.original.name,
+          email: item.original.email,
+          phone: item.original.phone,
+          hobbies: item.original.hobbies, // Using phone as price, you can change this as needed
+        })),
       },
-      outro: "Looking forward to doing more business",
+      outro: "Looking forward for accepting",
     },
   };
 
@@ -42,7 +42,7 @@ export async function mailSend(userEmail: string) {
   let message = {
     from: process.env.EMAIL,
     to: userEmail,
-    subject: "Place Order",
+    subject: "Persons Data",
     html: mail,
   };
 

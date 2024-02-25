@@ -4,8 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import Header from "@/components/Header";
 import { ReduxProvider } from "../store/provider";
-import { ToastContainer } from "react-toastify";
-
+import ToastProvider from "./ToastProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -28,20 +27,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Header />
-            <ToastContainer
-              position="top-center"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="dark"
-            />
-            {children}
+            <ToastProvider>
+              <Header />
+
+              {children}
+            </ToastProvider>
           </ThemeProvider>
         </ReduxProvider>
       </body>

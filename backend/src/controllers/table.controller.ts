@@ -49,9 +49,33 @@ const getTables = asyncHandler(async (req: Request, res: Response) => {
 const mailController = asyncHandler(async (req: Request, res: Response) => {
   const arrayBody = req.body;
 
-  // const info = mailSend("komineni.saikrishna@gmail.com");
+  const info = mailSend("komineni.saikrishna@gmail.com", arrayBody);
+
+  if (!info) {
+    throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Mail not sent");
+  }
 
   res.status(200).json(new ApiResponse(200, info, "Mail sent sucessfully"));
 });
 
-export { getTables, insertTable, deleteTable, mailController };
+const updateData = asyncHandler(async (req: Request, res: Response) => {
+  const tableId = req.params.id;
+  const { name, email, phone, hobbies } = req.body;
+  const tabelFound = await Table.findById(tableId);
+  if (!tabelFound) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "Table not found");
+  }
+  const table = await Table.findByIdAndUpdate(
+    tableId,
+    { name, email, phone, hobbies },
+    { new: true }
+  );
+  if (!table) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "Table not updated");
+  }
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(200, table, "Table updated successfully"));
+});
+
+export { getTables, insertTable, deleteTable, mailController, updateData };
