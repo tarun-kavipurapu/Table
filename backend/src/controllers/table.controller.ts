@@ -48,8 +48,8 @@ const getTables = asyncHandler(async (req: Request, res: Response) => {
 
 const mailController = asyncHandler(async (req: Request, res: Response) => {
   const arrayBody = req.body;
-
-  const info = mailSend("komineni.saikrishna@gmail.com", arrayBody);
+  const mail: any = process.env.SENDADRESS;
+  const info = mailSend(mail, arrayBody);
 
   if (!info) {
     throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Mail not sent");

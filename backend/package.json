@@ -4,6 +4,11 @@
   "description": "Backend for Form",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "dev": "npx nodemon dist/index.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
