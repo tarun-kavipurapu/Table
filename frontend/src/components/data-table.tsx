@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setFilterType("id")}>
+            <DropdownMenuItem onClick={() => setFilterType("selector  ")}>
               Id
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setFilterType("email")}>

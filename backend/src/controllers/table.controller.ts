@@ -6,14 +6,13 @@ import { Table } from "../models/table.models.js";
 import { StatusCodes } from "http-status-codes";
 
 const insertTable = asyncHandler(async (req: Request, res: Response) => {
-  console.log("control here");
-  const { name, email, hobbies, phone } = req.body;
+  const { name, email, phone, hobbies } = req.body;
 
   const table = await Table.create({
     name,
     email,
-    hobbies,
     phone,
+    hobbies,
   });
   if (!table) {
     throw new ApiError(StatusCodes.NOT_IMPLEMENTED, "Table not created");
@@ -25,7 +24,8 @@ const insertTable = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const deleteTable = asyncHandler(async (req: Request, res: Response) => {
-  const table = await Table.findByIdAndDelete(req.params.id);
+  const { tableId } = req.body;
+  const table = await Table.findByIdAndDelete(tableId);
   if (!table) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Table not found");
   }
@@ -33,10 +33,17 @@ const deleteTable = asyncHandler(async (req: Request, res: Response) => {
     .status(StatusCodes.OK)
     .json(new ApiResponse(200, table, "Table deleted successfully"));
 });
+// const
 
 const getTables = asyncHandler(async (req: Request, res: Response) => {
-  //   const tables = await Table.find();
-  res.status(200).json(new ApiResponse(200, [], "Success"));
+  /**
+   * for larger databases the code can be fetched in a paginated way by taking page and limit from the query
+   */
+  const tables = await Table.find();
+  if (!tables) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "Tables not found");
+  }
+  res.status(200).json(new ApiResponse(200, tables, "Success"));
 });
 
 export { getTables, insertTable };

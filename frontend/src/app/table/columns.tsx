@@ -1,16 +1,18 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export type Person = {
-  id: string;
+  _id?: string;
+  serial: string;
   name: string;
   phone: string;
   email: string;
-  hobbies: string;
+  hobbies?: string;
+  isSaved?: boolean;
 };
 
 export const columns: ColumnDef<Person>[] = [
@@ -37,7 +39,7 @@ export const columns: ColumnDef<Person>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "serial",
     header: ({ column }) => {
       return (
         <Button
@@ -92,8 +94,24 @@ export const columns: ColumnDef<Person>[] = [
       );
     },
   },
+
   {
     accessorKey: "hobbies",
     header: "Hobbies",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const payment = row.original;
+
+      return (
+        <span className="flex flex-row gap-2">
+          <Button onClick={updateRow}>Update</Button>
+          <Button onClick={DeleteRow}>
+            <Trash />
+          </Button>
+        </span>
+      );
+    },
   },
 ];

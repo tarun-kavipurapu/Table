@@ -24,7 +24,7 @@ import { personSchema } from "@/lib/validations";
 
 type Person = z.infer<typeof personSchema>;
 
-export default function JoinRoom() {
+export default function AddEntry({ addEntry }: any) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<Person>({
     resolver: zodResolver(personSchema),
@@ -33,17 +33,16 @@ export default function JoinRoom() {
       phone: "",
       email: "",
       hobbies: "",
+      isSaved: false,
     },
   });
 
   function onSubmit(values: Person) {
     setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    addEntry(values);
+    // console.log(values);
   }
-
+  console.log;
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -113,11 +112,7 @@ export default function JoinRoom() {
             />
 
             <Button type="submit" className="mt-2">
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Add Entry"
-              )}
+              {"Add Entry"}
             </Button>
           </form>
         </Form>
