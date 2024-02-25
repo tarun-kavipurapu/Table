@@ -3,7 +3,7 @@ import { Person } from "./validations";
 import { PersonArray } from "@/store/personSlice";
 import { toast } from "react-toastify";
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000", // Your Node.js server URL
+  baseURL: "http://plankton-app-9curw.ondigitalocean.app",
   headers: {
     "Content-Type": "application/json",
   },
@@ -12,7 +12,6 @@ const axiosInstance = axios.create({
 export const getData = async () => {
   try {
     const response = await axiosInstance.get("/api/v1/tables");
-    console.log(response.data);
     return response.data.data;
   } catch (error) {
     toast.error("Error fetching data:");
