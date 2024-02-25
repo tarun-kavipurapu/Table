@@ -1,13 +1,17 @@
 import { Router } from "express";
-import { getTables, insertTable } from "../controllers/table.controller";
+import {
+  deleteTable,
+  getTables,
+  insertTable,
+  mailController,
+} from "../controllers/table.controller";
 import { validateData } from "../middleware/validation.middleware";
 import { personSchema } from "../middleware/validation.middleware"; // Import the schema separately
 const router = Router();
 
-router
-  .route("/")
-  .post(validateData(personSchema), insertTable)
-  .get(getTables)
-  .delete();
+router.route("/").post(validateData(personSchema), insertTable).get(getTables);
 
+router.route("/:id").delete(deleteTable);
+
+router.route("/mail").post(mailController);
 export default router;

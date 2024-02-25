@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Table } from "../models/table.models.js";
 import { StatusCodes } from "http-status-codes";
-
+import { mailSend } from "../utils/mailSend.js";
 const insertTable = asyncHandler(async (req: Request, res: Response) => {
   const { name, email, phone, hobbies } = req.body;
 
@@ -24,7 +24,7 @@ const insertTable = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const deleteTable = asyncHandler(async (req: Request, res: Response) => {
-  const { tableId } = req.body;
+  const tableId = req.params.id;
   const table = await Table.findByIdAndDelete(tableId);
   if (!table) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Table not found");
@@ -46,4 +46,12 @@ const getTables = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(new ApiResponse(200, tables, "Success"));
 });
 
-export { getTables, insertTable };
+const mailController = asyncHandler(async (req: Request, res: Response) => {
+  const arrayBody = req.body;
+
+  // const info = mailSend("komineni.saikrishna@gmail.com");
+
+  res.status(200).json(new ApiResponse(200, info, "Mail sent sucessfully"));
+});
+
+export { getTables, insertTable, deleteTable, mailController };
